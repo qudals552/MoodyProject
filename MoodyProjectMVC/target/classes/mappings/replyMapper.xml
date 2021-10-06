@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moody.dao.IReplyDAO">
+ 	<resultMap type="replyDto" id="replySet">
+ 		<result property="rno"			column="R_NO"/>
+ 		<result property="bno"			column="B_NO"/>
+		<result property="id" 			column="M_ID" />
+		<result property="nickName"		column="M_NICK" />
+		<result property="contents" 	column="R_CONTENTS" />
+		<result property="regDate" 		column="R_REG_DATE" />
+		<result property="updateDate"	column="R_UPDATE_DATE" />
+	</resultMap>
+	
+	<insert id="insert">
+		INSERT INTO REPLY(R_NO, B_NO, M_ID, R_CONTENTS,R_REG_DATE,R_UPDATE_DATE)
+					VALUES(REPLY_SEQ.NEXTVAL, #{bno}, #{id}, #{contents}, #{regDate}, #{updateDate})
+	</insert>
+	
+	<select id="read" resultMap="replySet">
+		SELECT R_NO, R.B_NO, R.M_ID, M.M_NICK, R_CONTENTS, TO_CHAR(TO_DATE(R_REG_DATE, 'YYYYMMDDHH24:MISS'), 'YYYY-MM-DD HH24:MI') as "R_REG_DATE", R_UPDATE_DATE
+      	FROM BOARD B JOIN REPLY R ON (B.B_NO = R.B_NO)
+                     JOIN MEMBER_INFO M ON (B.M_ID = M.M_ID)
+      	WHERE R.R_NO = #{rno}
+	</select>
+	
+	<update id="update">
+		UPDATE REPLY
+		SET R_CONTENTS = #{contents}, R_UPDATE_DATE = #{updateDate}
+		WHERE R_NO = #{rno}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM REPLY
+		WHERE R_NO = #{rno}
+	</delete>	
+
+</mapper>

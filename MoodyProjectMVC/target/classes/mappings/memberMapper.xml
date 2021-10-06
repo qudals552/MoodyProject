@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moody.dao.IMemberDAO">
+ 	<resultMap type="mbrDto" id="reSet">
+		<result property="id" 			column="M_ID" />
+		<result property="nickName" 	column="M_NICK" />
+		<result property="password"		column="M_PASSWORD" />
+		<result property="email" 		column="M_EMAIL" />
+		<result property="regDate" 		column="M_REG_DATE" />
+		<result property="grade" 		column="M_GRADE" />
+	</resultMap>
+	
+	<select id="getUser" parameterType="String" resultMap="reSet">
+		SELECT * FROM MEMBER_INFO WHERE M_ID = #{id}
+	</select>
+	
+	<insert id="insertUser" parameterType="mbrDto">
+		INSERT INTO MEMBER_INFO(M_ID, M_NICK, M_PASSWORD, M_EMAIL, M_REG_DATE, M_GRADE)
+		VALUES(#{id}, #{nickName}, #{password}, #{email}, #{regDate}, #{grade})
+	</insert>
+
+	<update id="update" parameterType="mbrDto">
+		UPDATE MEMBER_INFO SET
+		M_PASSWORD = #{password}, M_EMAIL = #{email}
+		WHERE M_ID = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE MEMBER_INFO SET
+		M_GRADE = 'F'
+		WHERE M_ID = #{id}
+	</update>
+
+</mapper>

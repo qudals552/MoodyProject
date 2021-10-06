@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moody.dao.IMemberQEBC">
+ 	<resultMap type="mbrDto" id="reSet">
+		<result property="id" 			column="M_ID" />
+		<result property="nickName" 	column="M_NICK" />
+		<result property="password"		column="M_PASSWORD" />
+		<result property="email" 		column="M_EMAIL" />
+		<result property="regDate" 		column="M_REG_DATE" />
+		<result property="grade" 		column="M_GRADE" />
+	</resultMap>
+	
+	<select id="getNickName" parameterType="String" resultMap="reSet">
+		SELECT * FROM MEMBER_INFO WHERE M_NICK = #{nickName}
+	</select>
+ 	
+ 	<!-- 검색체크박스SQL -->
+ 	 	<select id="getSearchCount" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER_INFO
+		WHERE ${searchType} LIKE ('%'||#{keyword}||'%')
+	</select>
+	
+	<select id="getSearchPageCount" resultType="int">
+		SELECT CEIL(COUNT(*)/10)
+		FROM MEMBER_INFO
+		WHERE ${searchType} LIKE ('%'||#{keyword}||'%')
+	</select>
+	
+ 	<select id="getSearch" resultMap="reSet">
+		<![CDATA[
+		SELECT * FROM ( SELECT ROWNUM RNUM
+                   , O.*        
+                      FROM ( SELECT M_ID, M_NICK, M_PASSWORD, M_EMAIL,TO_CHAR(TO_DATE(M_REG_DATE, 'YYYYMMDDHH24:MISS'), 'YYYY-MM-DD') as "M_REG_DATE", M_GRADE
+                             FROM MEMBER_INFO
+                             WHERE ${searchType} LIKE ('%'||#{keyword}||'%')                          
+                             ORDER BY M_ID DESC
+                           ) O             
+                  )
+                  WHERE RNUM >= #{startPage}
+                  AND ROWNUM <= #{endPage}
+		]]>
+	</select>
+	<!-- 검색체크박스SQL END -->
+	
+	<!-- 무디 게시판 SQL -->
+	<select id="getMemberCount" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER_INFO
+	</select>
+	
+	<select id="getPagingCount" resultType="int">
+		SELECT CEIL(COUNT(*)/10)
+		FROM MEMBER_INFO
+	</select>
+	
+ 	<select id="getList" parameterType="hashmap" resultMap="reSet">
+		<![CDATA[
+		SELECT * FROM ( SELECT ROWNUM RNUM
+                   , O.*        
+                      FROM ( SELECT M_ID, M_NICK, M_PASSWORD, M_EMAIL ,TO_CHAR(TO_DATE(M_REG_DATE, 'YYYYMMDDHH24:MISS'), 'YYYY-MM-DD') as "M_REG_DATE", M_GRADE
+                             FROM MEMBER_INFO         
+                             ORDER BY M_ID DESC
+                           ) O             
+                  )
+                  WHERE RNUM >= #{pageDTO.startPage}
+                  AND ROWNUM <= #{pageDTO.endPage}
+		]]>
+	</select>
+	<!-- 무디 게시판 SQL END--> 	
+</mapper>

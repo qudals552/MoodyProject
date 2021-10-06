@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moody.dao.IRecommendDAO">
+
+	<resultMap type="recommendDto" id="recommendRE">
+ 		<result property="bNo"			column="B_NO"/>
+		<result property="id" 			column="M_ID" />
+	</resultMap>
+	
+	<!-- 게시글 추천 중복확인 -->
+	<select id="getRecommend" resultType="String">
+		SELECT M_ID
+		FROM RECOMMEND
+		WHERE B_NO = #{bNo}
+		AND M_ID = #{id}
+	</select>
+	
+	<!-- 게시글 추천 -->
+	<update id="recommend">
+		UPDATE BOARD
+		SET B_LIKE = #{bLike}
+		WHERE B_NO = #{bNo}
+	</update>
+	
+	<!-- 추천이력추가 -->
+	<insert id="insertRecommendHist">
+		INSERT INTO RECOMMEND 
+		VALUES(#{bNo}, #{id})
+	</insert>
+	
+	<!-- 추천이력삭제 -->
+	<delete id="deleteRecommendHist">
+		DELETE FROM RECOMMEND WHERE B_NO = #{bNo}
+	</delete>
+	
+</mapper>

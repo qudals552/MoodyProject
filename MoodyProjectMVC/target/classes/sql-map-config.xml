@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.moody.dto.MemberDTO" alias="mbrDto"/>
+		<typeAlias type="com.moody.dto.BoardDTO" alias="boardDto"/>
+		<typeAlias type="com.moody.dto.ReplyDTO" alias="replyDto"/>
+		<typeAlias type="com.moody.dto.PageDTO" alias="pageDto"/>
+		<typeAlias type="com.moody.dto.RecommendDTO" alias="recommendDto"/>
+		<typeAlias type="com.moody.dto.BoardSearchDTO" alias="boardSearchDto"/>
+	</typeAliases>
+</configuration>
